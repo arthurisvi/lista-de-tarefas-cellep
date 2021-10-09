@@ -1,6 +1,6 @@
 const app = require('./config/server');
 const db = require('./config/connectionBD')
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 const { jwt, jwtConfig } = require('./config/jwt');
 
 app.post('/cadastro/salvar-cadastro', async(req, res) => {
@@ -65,4 +65,4 @@ app.get('/minhastarefas', async(req, res) => {
 
 app.get('/', async(req, res) => { res.render('login/login'); });
 
-app.listen(port, () => console.log(`Funcionando na porta ${port}`));
+app.listen(PORT, () => console.log(`Funcionando na porta ${PORT}`));

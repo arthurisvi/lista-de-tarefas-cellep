@@ -1,0 +1,73 @@
+<%- include('../common/header') %>
+
+
+    <main class="vw-100 vh-100 d-flex align-items-center justify-content-center main">
+        <div class="conteiner d-flex w-75 h-75">
+            <div class="w-75 container m-0 p-0 anime-img">
+                <img class="w-100 h-100" alt="tarefas" src="/img/lista-de-tarefas.jpeg">
+            </div>
+
+            <div class="w-50 h-100 p-5 container container-login d-flex flex-column justify-content-center bg-light">
+
+                <h1 class="align-self-center mb-3" style="color: #7FAEFA">Login</h1>
+
+                <form class="d-flex flex-column">
+
+                    <div class="mb-4">
+                        <label for="email1" class="form-label">Email</label>
+                        <input type="email" class="form-control h-75" id="email" name="email" placeholder="Insira seu email" required>
+                    </div>
+
+                    <div class="mb-4 mt-3">
+                        <label for="password" class="form-label">Senha</label>
+                        <input type="password" class="form-control h-75" id="password" name="password" placeholder="Insira sua senha" required>
+                    </div>
+
+                    <div class="mb-3 d-flex align-self-center">
+                        <a class="mt-3 mb-1" href="/cadastro">Cadastro</a>
+                    </div>
+
+                    <input type="submit" value="Entrar" class="btn button-login w-50 mt-2 align-self-center" id="login-button">
+                </form>
+            </div>
+    </main>
+
+    <script>
+        window.onload = () => {
+            localStorage.removeItem('token');
+        }
+
+        document.getElementById('login-button').addEventListener('click', async e => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                window.alert('preencha tudo certo');
+            } else {
+                const params = {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                };
+
+                const response = await fetch('/login', params);
+                const res = await response.json();
+                const token = res.token;
+
+                if (token) {
+                    localStorage.setItem('token', token);
+                    window.location.replace('/minhastarefas');
+                } else {
+                    window.alert('Usuário ou senha incorretos!');
+                }
+            }
+        });
+    </script>

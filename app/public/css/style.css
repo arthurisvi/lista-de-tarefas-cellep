@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web');
+@media (max-width: 1200px) {
+    .container-login {
+        width: 500px !important;
+        height: 100% !important;
+        padding: 15px !important;
+        align-items: center !important;
+    }
+    .anime-img {
+        display: none;
+    }
+}
+
+.main {
+    background: linear-gradient(to bottom, #97FBDD, #7FAEFA);
+}
+
+.titulo {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 24px;
+}
+
+.rodape {
+    width: 100%;
+    float: left;
+    padding: 0% 4%;
+    text-align: center;
+    background: #DCDCDC;
+    color: #808080;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 14px;
+}
+
+.links {
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 16px;
+}
+
+.copyright {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.navbar {
+    margin-bottom: 5px;
+}
+
+.input-group {
+    width: 70%;
+}
+
+.container-login {
+    border-radius: 10px;
+}
+
+.button-login {
+    background-color: #C0FFA1;
+    border-radius: 10px;
+}
+
+.button-login:hover {
+    background-color: #97FBDD;
+    -webkit-transition: background-color 300ms linear;
+    -ms-transition: background-color 300ms linear;
+    transition: background-color 300ms linear;
+}

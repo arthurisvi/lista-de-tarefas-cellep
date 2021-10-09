@@ -2,6 +2,9 @@
     "name": "lista_de_tarefas_cellep",
     "version": "1.0.0",
     "description": "",
+    "engines": {
+        "node": "14.x"
+    },
     "main": "app.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,7 +15,6 @@
     "license": "ISC",
     "dependencies": {
         "ejs": "^3.1.6",
-        "engines": "^0.4.0",
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",
         "pg": "^8.7.1"

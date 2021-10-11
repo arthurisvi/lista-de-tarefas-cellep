@@ -13,4 +13,4 @@ const jwtConfig = {
     },
 }
 
-module.exports = { jwt, jwtConfig }
+module.exports = { jwt, jwtConfig };

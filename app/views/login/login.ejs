@@ -64,7 +64,8 @@
 
                 if (token) {
                     localStorage.setItem('token', token);
-                    window.location.replace('/minhastarefas');
+                    localStorage.setItem('userEmail', email);
+                    window.location.replace(`/minhastarefas/${email}`);
                 } else {
                     window.alert('Usuário ou senha incorretos!');
                 }

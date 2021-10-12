@@ -19,7 +19,7 @@
                             </div>
                             
                             <!-- <button type="submit" class="btn btn-success btn-block" id="salvar-tarefa">Salvar</button> -->
-                            <button type="submit" class="btn btn-success btn-block" id="salvar" onclick="salvarTarefa">Salvar</button>
+                            <button type="button" class="btn btn-success btn-block" id="salvar-tarefa">Salvar</button>
                         </form>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                                         </p>
                                     </div>
                                     <div class="col-sm-2 text-right">
-                                        <a href="/minhastarefas/excluir?id=<%= tarefa.id_tarefa %>" class="btn btn-danger ml-5">X</a>
+                                        <a href="/minhastarefas/excluir?id=<%= tarefa.id_tarefa %>" id="excluir-tarefa" class="btn btn-danger ml-5">X</a>
                                     </div>
                                 </div>
                             </div>
@@ -79,78 +79,49 @@
     
     <%- include('../common/footer') %>
     
-    <script>
-        window.onload = () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.replace('/');
-            }
-            else {
-                const userEmail = localStorage.getItem('userEmail');
-                
-                const params = {
-                    method: 'GET',
-                    mode: 'cors',
-                    headers: new Headers({
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`,
-                    }),
-                }
-                
-                const response = await fetch(`/minhastarefas?${userEmail}`);
-                const res = await respons.json();
-            }
+<script>
+    window.onload = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.replace('/');
         }
-        
-        document.getElementById('salvar').addEventListener('click', e => {
-            e.preventDefault();
-            window.alert('opa')
-        });
-        
-        function salvarTarefa() {
-            console.log('clique');
-            
-            const token = localStorage.getItem('token');
+        else {
             const userEmail = localStorage.getItem('userEmail');
-            const nome = document.getElementById('nome').value;
-            const descricao = document.getElementById('descricao').value;
-            
             const params = {
-                method: 'POST',
+                method: 'GET',
                 mode: 'cors',
                 headers: new Headers({
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`,
                 }),
-                body: JSON.stringify({ userEmail, nome, descricao })
             }
-            
-            await fetch('/minhastarefas/salvar-tarefa', params);
-            
-            // window.location.replace(`/minhastarefas/${userEmail}`);
+            const response = await fetch(`/minhastarefas?${userEmail}`);
+            const res = await respons.json();
         }
+    }
         
-        document.getElementById('salvar-tarefa').addEventListener('click', async event => {
-            event.preventDefault();
-            // console.log('clique');
-            
-            // const token = localStorage.getItem('token');
-            // const userEmail = localStorage.getItem('userEmail');
-            // const nome = document.getElementById('nome').value;
-            // const descricao = document.getElementById('descricao').value;
-            
-            // const params = {
-                //     method: 'POST',
-                //     mode: 'cors',
-                //     headers: new Headers({
-                    //         "Content-Type": "application/json",
-                    //         "Authorization": `Bearer ${token}`,
-                    //     }),
-                    //     body: JSON.stringify({ userEmail, nome, descricao })
-                    // }
-                    
-                    // await fetch('/minhastarefas/salvar-tarefa', params);
-                    
-                    // // window.location.replace(`/minhastarefas/${userEmail}`);
-                });
-            </script>
+    document.getElementById('salvar-tarefa').addEventListener('click', async e => {
+        e.preventDefault();
+        const token = localStorage.getItem('token');
+        const userEmail = localStorage.getItem('userEmail');
+        const nome = document.getElementById('nome').value;
+        const descricao = document.getElementById('descricao').value;
+        const params = {
+            method: 'POST',
+            mode: 'cors',
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            }),
+            body: JSON.stringify({ userEmail, nome, descricao })
+        }
+        await fetch('/minhastarefas/salvar-tarefa', params);
+        window.location.replace(`/minhastarefas/${userEmail}`);
+    });
+    
+    // document.getElementById('excluir-tarefa').addEventListener('click', () => {
+        
+    //     const userEmail = localStorage.getItem('userEmail');
+    //     window.location.replace(`/minhastarefas/${userEmail}`);
+    // });
+</script>

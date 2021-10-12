@@ -5,24 +5,28 @@
             <a class="navbar-brand titulo" href="#">Lista de Tarefas</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-          </button>
+            </button>
             <div class="collapse navbar-collapse links" id="navbarText">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/minhastarefas">Minhas tarefas</a>
+                        <a class="nav-link active" aria-current="page" href="/minhastarefas" id="minhas-tarefas">Minhas tarefas</a>
                     </li>
-
                 </ul>
-
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="/">Sair</a>
                     </li>
-
                 </ul>
-
             </div>
         </div>
     </nav>
 
 </header>
+
+<script>
+    document.getElementById('minhas-tarefas').addEventListener('click', async e => {
+        e.preventDefault();
+        const email = localStorage.getItem('userEmail');
+        window.location.replace(`http://localhost:3000/minhastarefas/${email}`);
+    })
+</script>

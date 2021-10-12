@@ -1,17 +1,17 @@
 const app = require('./config/server');
 const db = require('./config/connectionBD');
 const cors = require('cors');
-const PORT = process.env.PORT || 3000;
 const { jwt, jwtConfig } = require('./config/jwt');
+const { bcrypt, saltRounds, salt } = require('./config/bcrypt');
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
 app.post('/cadastro/salvar-cadastro', async(req, res) => {
     const { email, password } = req.body;
-    const values = [email, password];
-    
+    const hash = bcrypt.hashSync(password, salt);
+    const values = [email, hash];
     const response = await db.query('SELECT * FROM usuario WHERE email = $1', [email])
-    
     if (response.rows.length === 0) {
         await db.query('INSERT INTO usuario(email, senha) VALUES ($1, $2)', values);
         res.status(201).send({ status: 'Usuário cadastrado com sucesso!' })
@@ -29,10 +29,11 @@ app.post('/login', async(req, res) => {
 
     if (response.rows.length > 0) {
         const { id_usuario, email, senha } = response.rows[0];
-        if (user_email === email && user_password === senha) {
-            const token = jwt.sign({ id_usuario: id_usuario }, jwtConfig.secret, { expiresIn: 600 });
-            return res.json({ auth: true, token });
-        } else { res.status(401).send({ status: 'A senha não corresponde ao usuário.' }); }
+        console.log(bcrypt.compareSync(user_password, senha));
+        // if (user_email === email && bcrypt.compareSync(user_password, senha)) {
+        //     const token = jwt.sign({ id_usuario: id_usuario }, jwtConfig.secret, { expiresIn: 600 });
+        //     return res.json({ auth: true, token });
+        // } else { res.status(401).send({ status: 'A senha não corresponde ao usuário.' }); }
     }
     else { res.status(401).send({ status: 'Email não encontrado.' }); }
 });

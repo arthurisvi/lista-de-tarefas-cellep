@@ -43,12 +43,23 @@ app.post('/login', async (req, res) => {
 
 
 
-app.get('/minhastarefas/:userEmail', jwtConfig.verifyJWT, async(req, res) => {
-    const userEmail = req.params.userEmail;
-    const response = await db.query('SELECT id_usuario FROM usuario where email = $1', [userEmail]);
-    const idUser = await response.rows[0].id_usuario;
-    const response2 = await db.query('SELECT id_tarefa, nome, descricao FROM tarefas WHERE fk_id_usuario = $1', [idUser]);
-    res.render('lista/tarefas', { tarefas: response2.rows });
+app.get('/minhastarefas/:userEmail', /*jwt.verify,*/ async(req, res, next) => {
+    // console.log(jwtConfig.verifyJWT(req, res));
+    // console.log(req.headers);
+    console.log(req);
+    // jwtConfig.verifyJWT(req, res, next);
+    // if( jwtConfig.verifyJWT(req, res) ) {
+        try {
+            const userEmail = req.params.userEmail;
+            const response = await db.query('SELECT id_usuario FROM usuario where email = $1', [userEmail]);
+            const idUser = await response.rows[0].id_usuario;
+            const response2 = await db.query('SELECT id_tarefa, nome, descricao FROM tarefas WHERE fk_id_usuario = $1', [idUser]);
+            res.render('lista/tarefas', { tarefas: response2.rows });
+        }
+        catch(e) {
+            res.status(401).redirect('/');
+        }
+    // }
 });
 
 app.post('/minhastarefas/salvar-tarefa', async (req, res) => {

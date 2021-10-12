@@ -81,11 +81,11 @@
     
 <script>
     window.onload = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.replace('/');
-        }
-        else {
+        // const token = localStorage.getItem('token');
+        // if (!token) {
+        //     window.location.replace('/');
+        // }
+        // else {
             const userEmail = localStorage.getItem('userEmail');
             const params = {
                 method: 'GET',
@@ -97,12 +97,13 @@
             }
             const response = await fetch(`/minhastarefas?${userEmail}`);
             const res = await respons.json();
-        }
+        // }
     }
         
     document.getElementById('salvar-tarefa').addEventListener('click', async e => {
         e.preventDefault();
         const token = localStorage.getItem('token');
+        console.log(token);
         const userEmail = localStorage.getItem('userEmail');
         const nome = document.getElementById('nome').value;
         const descricao = document.getElementById('descricao').value;

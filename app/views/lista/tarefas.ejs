@@ -3,7 +3,6 @@
 <%- include('../common/menu') %>
 
 <main class="vw-100 vh-100 d-flex align-items-center justify-content-center main">
-    
     <div class="container">
         <div class="row my-5">
             <div class="col-md-4">
@@ -24,7 +23,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-sm-3 text-left">
@@ -40,15 +38,12 @@
                     </div>
                     
                 </div>
-                
                 <hr>
                 <div id="tarefas">
-                    
                     <% tarefas.forEach(tarefa => { %>
                         <div class="card mb-3">
                             <div class="card-body">
                                 <div class="row">
-                                    
                                     <div class="col-sm-3 text-left">
                                         <p>
                                             <%= tarefa.nome %>
@@ -65,38 +60,36 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <%}) %>
-                    </div>
+                    <%}) %>
                 </div>
-                
-                
             </div>
-            
         </div>
-        
-    </main>
+    </div>
+</main>
     
     <%- include('../common/footer') %>
     
 <script>
     window.onload = async () => {
-        // const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token');
         // if (!token) {
         //     window.location.replace('/');
         // }
         // else {
-            const userEmail = localStorage.getItem('userEmail');
-            const params = {
-                method: 'GET',
-                mode: 'cors',
-                headers: new Headers({
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                }),
-            }
-            const response = await fetch(`/minhastarefas?${userEmail}`);
-            const res = await respons.json();
+        const userEmail = localStorage.getItem('userEmail');
+        const params = {
+            method: 'GET',
+            credentials: 'include',
+            mode: 'cors',
+            headers: new Headers({
+                "Content-Type": "application/x-www-form-urlencoded",
+                'Access-Control-Allow-Origin': '*',
+                'Accept': 'text/plan',
+                "Authorization": `Bearer ${token}`
+            }),
+        }
+        const response = await fetch(`/minhastarefas?${userEmail}`);
+        const res = await respons.json();
         // }
     }
         

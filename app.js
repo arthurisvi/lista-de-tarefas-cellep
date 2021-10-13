@@ -25,7 +25,7 @@ app.get('/cadastro', async(req, res) => { res.render('cadastro/cadastro'); });
 
 
 
-app.post('/login', async (req, res) => {
+app.post('/login', async(req, res) => {
     const user_email = req.body.email
     const user_password = req.body.password
     const values = [user_email];
@@ -36,39 +36,47 @@ app.post('/login', async (req, res) => {
             const token = jwt.sign({ id_usuario: id_usuario }, jwtConfig.secret, { expiresIn: 600 });
             return res.json({ auth: true, token });
         } else { res.status(401).send({ status: 'A senha não corresponde ao usuário.' }); }
+    } else { res.status(401).send({ status: 'Email não encontrado.' }); }
+});
+
+
+
+
+app.get('/minhastarefas/:userEmail', /*jwt.verify,*/ async(req, res, next) => {
+    // console.log(jwtConfig.verifyJWT(req, res));
+    // console.log(req.headers);
+    console.log(req);
+    // jwtConfig.verifyJWT(req, res, next);
+    // if( jwtConfig.verifyJWT(req, res) ) {
+    try {
+        const userEmail = req.params.userEmail;
+        const response = await db.query('SELECT id_usuario FROM usuario where email = $1', [userEmail]);
+        const idUser = await response.rows[0].id_usuario;
+        const response2 = await db.query('SELECT id_tarefa, nome, descricao FROM tarefas WHERE fk_id_usuario = $1', [idUser]);
+        res.render('lista/tarefas', { tarefas: response2.rows });
+    } catch (e) {
+        res.status(401).redirect('/');
     }
-    else { res.status(401).send({ status: 'Email não encontrado.' }); }
+    // }
 });
 
-
-
-
-app.get('/minhastarefas/:userEmail', jwtConfig.verifyJWT, async(req, res) => {
-    const userEmail = req.params.userEmail;
-    const response = await db.query('SELECT id_usuario FROM usuario where email = $1', [userEmail]);
-    const idUser = await response.rows[0].id_usuario;
-    const response2 = await db.query('SELECT id_tarefa, nome, descricao FROM tarefas WHERE fk_id_usuario = $1', [idUser]);
-    res.render('lista/tarefas', { tarefas: response2.rows });
-});
-
-app.post('/minhastarefas/salvar-tarefa', async (req, res) => {
+app.post('/minhastarefas/salvar-tarefa', async(req, res) => {
     const { userEmail, nome, descricao } = req.body;
-    try{
+    try {
         const response = await db.query('SELECT id_usuario FROM usuario where email = $1', [userEmail]);
         const userId = response.rows[0].id_usuario;
         const values = [nome, descricao, userId];
         await db.query('INSERT INTO tarefas (nome, descricao, fk_id_usuario) VALUES ($1, $2, $3)', values)
-        .then(() => {
-            res.redirect(`/minhastarefas/${userEmail}`);
-        })
-        .catch(e => {
-            res.status(500).send({ error: 'Algo de errado aconteceu!' });
-        })
-    }
-    catch(e) {
+            .then(() => {
+                res.redirect(`/minhastarefas/${userEmail}`);
+            })
+            .catch(e => {
+                res.status(500).send({ error: 'Algo de errado aconteceu!' });
+            })
+    } catch (e) {
         res.status(500).send('Algo de errado aconteceu');
     }
-    
+
 });
 
 app.get('/minhastarefas/excluir', async(req, res) => {
@@ -77,7 +85,7 @@ app.get('/minhastarefas/excluir', async(req, res) => {
     const rows = response.rows[0];
     const email = rows.email;
     await db.query('DELETE FROM tarefas WHERE id_tarefa = $1', [id])
-    .then( () => res.redirect(`/minhastarefas/${email}`) );
+        .then(() => res.redirect(`/minhastarefas/${email}`));
 });
 
 

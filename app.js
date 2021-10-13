@@ -45,7 +45,7 @@ app.post('/login', async(req, res) => {
 app.get('/minhastarefas/:userEmail', /*jwt.verify,*/ async(req, res, next) => {
     // console.log(jwtConfig.verifyJWT(req, res));
     // console.log(req.headers);
-    console.log(req);
+    //console.log(req);
     // jwtConfig.verifyJWT(req, res, next);
     // if( jwtConfig.verifyJWT(req, res) ) {
     try {

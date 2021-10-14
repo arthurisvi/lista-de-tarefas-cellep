@@ -1,102 +1,89 @@
 <%- include('../common/header') %>
 
-<%- include('../common/menu') %>
+    <%- include('../common/menu') %>
 
-<main class="vw-100 vh-100 d-flex align-items-center justify-content-center main">
-    <div class="container">
-        <div class="row my-5">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <form id="myList">
-                            <div class="form-group">
-                                <input type="text" name="nome" id="nome" class="form-control" autocomplete="off" placeholder="Título da tarefa" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <textarea type="text" name="descricao" id="descricao" cols="30" rows="10" class="form-control" autocomplete="off" placeholder="Descrição" required></textarea>
-                            </div>
-                            
-                            <!-- <button type="submit" class="btn btn-success btn-block" id="salvar-tarefa">Salvar</button> -->
-                            <button type="button" class="btn btn-success btn-block" id="salvar-tarefa">Salvar</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-sm-3 text-left">
-                        <p><strong>Nome</strong></p>
-                    </div>
-                    
-                    <div class="col-sm-6 text-left">
-                        <p><strong>Descrição</strong></p>
-                    </div>
-                    
-                    <div class="col-sm-3 text-right">
-                        <p><strong>Excluir</strong></p>
-                    </div>
-                    
-                </div>
-                <hr>
-                <div id="tarefas">
-                    <% tarefas.forEach(tarefa => { %>
-                        <div class="card mb-3">
+        <main class="vw-100 vh-100 d-flex align-items-center justify-content-center main">
+            <div class="container">
+                <div class="row my-5">
+                    <div class="col-md-4">
+                        <div class="card">
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm-3 text-left">
-                                        <p>
-                                            <%= tarefa.nome %>
-                                        </p>
+                                <form id="myList">
+                                    <div class="form-group">
+                                        <input type="text" name="nome" id="nome" class="form-control" autocomplete="off" placeholder="Título da tarefa" required>
                                     </div>
-                                    <div class="col-sm-7 text-left">
-                                        <p>
-                                            <%= tarefa.descricao.substring(0,50) %>
-                                        </p>
+                                    
+                                    <div class="form-group">
+                                        <textarea type="text" name="descricao" id="descricao" cols="30" rows="10" class="form-control" autocomplete="off" placeholder="Descrição" required></textarea>
                                     </div>
-                                    <div class="col-sm-2 text-right">
-                                        <a href="/minhastarefas/excluir?id=<%= tarefa.id_tarefa %>" id="excluir-tarefa" class="btn btn-danger ml-5">X</a>
-                                    </div>
-                                </div>
+                                    
+                                    <!-- <button type="submit" class="btn btn-success btn-block" id="salvar-tarefa">Salvar</button> -->
+                                    <button type="button" class="btn btn-success btn-block" id="salvar-tarefa">Salvar</button>
+                                </form>
                             </div>
                         </div>
-                    <%}) %>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-sm-3 text-left">
+                                <p><strong>Nome</strong></p>
+                            </div>
+                            
+                            <div class="col-sm-6 text-left">
+                                <p><strong>Descrição</strong></p>
+                            </div>
+                            
+                            <div class="col-sm-3 text-right">
+                                <p><strong>Excluir</strong></p>
+                            </div>
+                            
+                        </div>
+                        <hr>
+                        <div id="tarefas">
+                            <% tarefas.forEach(tarefa => { %>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-3 text-left">
+                                                <p>
+                                                    <%= tarefa.nome %>
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-7 text-left">
+                                                <p>
+                                                    <%= tarefa.descricao.substring(0,50) %>
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-2 text-right">
+                                                <p> <%= tarefa.id_tarefa %> </p>
+                                                <!-- <input type="button" class="btn btn-danger ml-5" value="X" id="excluir-tarefa"> -->
+                                                <!-- <a href="#" class="btn btn-danger ml-5" id="excluir-tarefa">X</a> -->
+                                                <a href="/minhastarefas/excluir/<%= tarefa.id_tarefa %>" id="excluir-tarefa" class="btn btn-danger ml-5">X</a>
+                                                <!-- <a href="www.google.com" class="btn btn-danger ml-5">X</a> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <%}) %>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</main>
+        </main>
     
     <%- include('../common/footer') %>
     
 <script>
-    window.onload = async () => {
+    window.onload = async function() {
         const token = localStorage.getItem('token');
-        // if (!token) {
-        //     window.location.replace('/');
-        // }
-        // else {
-        const userEmail = localStorage.getItem('userEmail');
-        const params = {
-            method: 'GET',
-            credentials: 'include',
-            mode: 'cors',
-            headers: new Headers({
-                "Content-Type": "application/x-www-form-urlencoded",
-                'Access-Control-Allow-Origin': '*',
-                'Accept': 'text/plan',
-                "Authorization": `Bearer ${token}`
-            }),
+        if (!token) {
+            window.location.replace('/');
         }
-        const response = await fetch(`/minhastarefas?${userEmail}`);
-        const res = await respons.json();
-        // }
     }
         
     document.getElementById('salvar-tarefa').addEventListener('click', async e => {
         e.preventDefault();
         const token = localStorage.getItem('token');
-        console.log(token);
         const userEmail = localStorage.getItem('userEmail');
         const nome = document.getElementById('nome').value;
         const descricao = document.getElementById('descricao').value;
@@ -112,10 +99,4 @@
         await fetch('/minhastarefas/salvar-tarefa', params);
         window.location.replace(`/minhastarefas/${userEmail}`);
     });
-    
-    // document.getElementById('excluir-tarefa').addEventListener('click', () => {
-        
-    //     const userEmail = localStorage.getItem('userEmail');
-    //     window.location.replace(`/minhastarefas/${userEmail}`);
-    // });
 </script>
